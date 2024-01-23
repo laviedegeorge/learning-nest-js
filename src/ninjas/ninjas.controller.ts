@@ -9,11 +9,13 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
 import { CreateNinjaDto } from './dto/create-ninja.dto';
 import { UpdateNinjaDto } from './dto/update-ninja.dto';
 import { NinjasService } from './ninjas.service';
+import { BeltGuard } from 'src/belt/belt.guard';
 
 @Controller('ninjas')
 export class NinjasController {
@@ -34,11 +36,13 @@ export class NinjasController {
   }
 
   @Post()
+  @UseGuards(BeltGuard)
   createNinja(@Body(new ValidationPipe()) createNinjaDto: CreateNinjaDto) {
     return this.ninjaService.createNinja(createNinjaDto);
   }
 
   @Put(':id')
+  @UseGuards(BeltGuard)
   updateNinja(
     @Param('id', ParseIntPipe) id: number,
     @Body(new ValidationPipe()) updateNinjaDto: UpdateNinjaDto,
@@ -48,6 +52,7 @@ export class NinjasController {
   }
 
   @Delete(':id')
+  @UseGuards(BeltGuard)
   deleteNinja(@Param('id', ParseIntPipe) id: number) {
     return this.ninjaService.removeNinja(id);
   }
